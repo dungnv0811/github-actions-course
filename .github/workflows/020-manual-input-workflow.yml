@@ -11,16 +11,12 @@ on:
       official-image:
         description: 'Official Image'
         required: false
-        default: 'false'
-        type: choice
-        options:
-          - true
-          - false
+        default: 'latest'
       name:
         # Friendly description to be shown in the UI instead of 'name'
         description: 'Person to greet'
         # Default value if no value is explicitly provided
-        default: 'latest'
+        default: ''
         # Input has to be provided for the workflow to run
         required: false
 
@@ -46,13 +42,17 @@ jobs:
         else
           echo "There is no github tag reference, skipping"
         fi
-    - name: Sets env vars for release
+    - name: Sets env vars for latest
       run: |
-        echo "DOCKER_IMAGE_NAME=my.docker.repo/awesome-image:release" >> $GITHUB_ENV
-      if: ${{ github.event.inputs.official-image == 'true'}}
-    - name: Sets env vars for staging
+        echo "DOCKER_IMAGE_NAME=latest" >> $GITHUB_ENV
+      if: ${{ github.event.inputs.official-image == 'latest'}}
+    - name: Sets env vars for random
       run: |
         echo "DOCKER_IMAGE_NAME=$(uuidgen)" >> $GITHUB_ENV
-      if: ${{ github.event.inputs.official-image == 'false'}}
+      if: ${{ github.event.inputs.official-image == ''}}
+    - name: Sets env vars for version
+      run: |
+        echo "DOCKER_IMAGE_NAME=${{github.event.inputs.official-image}}" >> $GITHUB_ENV
+      if: ${{ github.event.inputs.official-image != '' && github.event.inputs.official-image != 'latest'}}
     - name: Send greeting
       run: echo "Hello ${{ env.DOCKER_IMAGE_NAME }}"

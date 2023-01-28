@@ -35,13 +35,6 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Runs a single command using the runners shell
-    - name: Send greeting2
-      run: |
-        if [[ ${{ github.event.inputs.official-image }} == true ]]; then
-          echo "version tag is true"
-        else
-          echo "There is no github tag reference, skipping"
-        fi
     - name: Sets env vars for latest
       run: |
         echo "DOCKER_IMAGE_NAME=latest" >> $GITHUB_ENV

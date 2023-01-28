@@ -35,10 +35,6 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Runs a single command using the runners shell
-    - name: Sets env vars for latest
-      run: |
-        echo "DOCKER_IMAGE_NAME=latest" >> $GITHUB_ENV
-      if: ${{ github.event.inputs.official-image == 'latest'}}
     - name: Sets env vars for random
       run: |
         echo "DOCKER_IMAGE_NAME=$(uuidgen)" >> $GITHUB_ENV
@@ -46,6 +42,6 @@ jobs:
     - name: Sets env vars for version
       run: |
         echo "DOCKER_IMAGE_NAME=${{github.event.inputs.official-image}}" >> $GITHUB_ENV
-      if: ${{ github.event.inputs.official-image != '' && github.event.inputs.official-image != 'latest'}}
+      if: ${{ github.event.inputs.official-image != ''}}
     - name: Send greeting
       run: echo "Hello ${{ env.DOCKER_IMAGE_NAME }}"
